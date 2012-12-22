@@ -24,21 +24,29 @@ return $ret;
 
 class DBO
 {
-	private $dbserver;
-	private $dbuser;
-	private $dbpassword;
-	
+	private static $dbserver;
+	private static $dbuser;
+	private static $dbpassword;
+	private static $dbo_object;
 	//InitDBO
 	//$dbserver:数据库服务器名
 	//$dbuser:数据库用户
         //$dbpassword:数据库密码
         //无返回值
+
+	function getInstance()
+	{
+		return $this->dbo_object;
+	}
+	
+	
+	
 	function InitDBO($dbserver,$dbuser,$dbpassword)
 	{
 		$this->dbserver = $dbserver;
 		$this->dbuser = $dbuser;
 		$this->dbpassword = $dbpassword;
-		
+		$this->dbo_object = new DBO();
 		//$this->$dbpassword = $dbpassword;
 	}
 	
@@ -68,7 +76,7 @@ class DBO
                     return $array;
 					mysql_close($conn);
             }
-        }
+       }
 		
 		///
 		///register函数
@@ -76,6 +84,7 @@ class DBO
 		///可判断用户名为空，邮箱地址不可发，昵称为空，密码为空，该用户是否已经注册过
 		function register($UserName,$NickName,$Password,$Email,$Question,$Answer,$SignDetail,$HavePic,$PicName)
 		{
+			//echo "1";
 			$error_EM_illegal = "邮箱地址不合法";
 			$error_UN_isnull = "用户名为空";
 			$error_NN_isnull = "昵称为空";
@@ -105,15 +114,18 @@ class DBO
 				//echo $error_PS_isnull;
 				return $error_NN_isnull;
 			}
+			mysql_select_db("bbs_database",$conn) or die ("can't select database");
 			mysql_query("SET NAMES UTF8");
 			mysql_query($sql);//执行存储过程
+			
 			$result = mysql_query('select @result;');
 			$array = mysql_fetch_array($result);
 			
+			//echo "2";
 			
 			
 			
-			//echo $array[0];
+			//echo "array = ".$array[0];
 			
 			//echo "</br>".$sql;
 			mysql_close($conn);

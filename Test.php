@@ -9,10 +9,16 @@
 
 <body>
 <?php
-include("DBO.php");
+include_once("DBO.php");
+include_once("fileop.php");
 $object = new DBO();
+
+
+//InitDB_FILE();
+
+
 $object->InitDBO("localhost","root","");
-$array  = $object->LoginCheck("fuxiangyun","fuxiangyun");
+//$array  = $object->LoginCheck("fuxiangyun","fuxiangyun");
 echo $array[0];
 
 echo "</br>".section2."</br>";
